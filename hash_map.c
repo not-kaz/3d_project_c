@@ -145,21 +145,22 @@ void hash_map_insert(struct hash_map *map, char *key, void *value)
 	map->length++;
 }
 
-void *hash_map_at(struct hash_map *map, char *key)
+int hash_map_at(struct hash_map *map, char *key, void **value)
 {
 	uint64_t index;
 
 	index = calc_index(key, map->capacity);
 	while (map->set[index].key != NULL) {
 		if (strcmp(key, map->set[index].key) == 0) {
-			return map->set[index].value;
+			*value = map->set[index].value;
+			return 1;
 		}
 		index++;
 		if (index >= map->capacity) {
 			index = 0;
 		}
 	}
-	return NULL;
+	return 0;
 }
 
 uint64_t hash_map_length(struct hash_map *map)
